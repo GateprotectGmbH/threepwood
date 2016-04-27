@@ -3,11 +3,6 @@ import IWindowService = angular.IWindowService;
 import ISidenavService = angular.material.ISidenavService;
 
 export class SettingsConfig {
-  url:string;
-  token:string;
-  projectMatch:string;
-  branchMatch:string;
-
   constructor(public url:string = 'https://gitlab.lan.adytonsystems.com',
               public token:string = '',
               public projectMatch:string = '',

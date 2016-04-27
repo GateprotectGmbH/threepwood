@@ -1,9 +1,9 @@
 import 'angular';
-import {BuildCardModule} from "./build-card";
-import {BuildsService, BuildsModule, Project, Build, BranchSummary} from "./builds";
+import {BuildsService, BuildsModule, BranchSummary} from "./builds";
 import IQService = angular.IQService;
 import IPromise = angular.IPromise;
 import {BranchSummaryModule} from "./branch-summary";
+import {Project} from "./gitlab-api";
 
 class Dashboard {
   static $inject = ['buildsService', '$q'];

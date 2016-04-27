@@ -8,6 +8,34 @@ import IPromise = angular.IPromise;
 import IQService = angular.IQService;
 import IHttpPromiseCallbackArg = angular.IHttpPromiseCallbackArg;
 
+type Records = Array<{[index:string]:any}>;
+
+export interface Project {
+  id:number;
+  path_with_namespace:string;
+  builds_enabled:boolean;
+  [index:string]:any;
+}
+
+export interface Build {
+  id:number;
+  name:string;
+  ref:string;
+  status:string;
+  created_at:string;
+  started_at:string;
+  finished_at:string;
+  derived:{
+    startedAt:number;
+    jobKey:string;
+    projectName:string;
+    id:string;
+  },
+  project:Project;
+  [index:string]:any;
+}
+
+
 export class GitlabApiService {
   static $inject = ['$http', 'settingsService', '$mdToast', '$q'];
 
@@ -28,10 +56,10 @@ export class GitlabApiService {
     };
   }
 
-  getByConfig(config:IRequestConfig):IHttpPromise<any> {
+  getByConfig(config:IRequestConfig):IPromise<Records> {
     console.log('GET', config);
-    return this.$http(config)
-      .then((result:IHttpPromiseCallbackArg<Array>) => {
+    return this.$http<Records>(config)
+      .then((result:IHttpPromiseCallbackArg<Records>):IPromise<Records> => {
         console.log('GOT', result);
         let link = result.headers('link');
         let url = this.nextPage(link);
@@ -40,20 +68,21 @@ export class GitlabApiService {
           let config = this.config();
           config.url = url;
           return this.getByConfig(config)
-            .then((nextPage) => result.data.concat(nextPage));
+            .then((nextPage:Records):Records => result.data.concat(nextPage));
         } else {
-          return result.data;
+          return this.$q.when(result.data);
         }
       })
+      .then((array:Records):Records => array)
       .catch((result) => {
         console.log('FAIL', result);
         let message = `GET failed: ${result.config.url} ${result.statusText}`;
         this.$mdToast.showSimple(message);
-        this.$q.reject(message);
+        return this.$q.reject(message);
       })
   }
 
-  get(url:string, page:number = 1, perPage:number = 100):IHttpPromise<any> {
+  get(url:string, page:number = 1, perPage:number = 100):IPromise<Records> {
     let config = this.config();
     config.url += url;
     config.params = {
@@ -70,12 +99,12 @@ export class GitlabApiService {
     }
   }
 
-  builds(id:number) {
-    return <IPromise<any[]>>this.get(`/api/v3/projects/${id}/builds`);
+  builds(projectId:number):IPromise<Build[]> {
+    return this.get(`/api/v3/projects/${projectId}/builds`);
   }
 
-  projects() {
-    return <IPromise<any[]>>this.get('/api/v3/projects');
+  projects():IPromise<Project[]> {
+    return this.get('/api/v3/projects');
   }
 }
 

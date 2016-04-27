@@ -1,32 +1,8 @@
 import 'angular';
-import {GitlabApiService} from "./gitlab-api";
+import {GitlabApiService, Build, Project} from "./gitlab-api";
 import {SettingsService} from "./settings";
 import IQService = angular.IQService;
 import IPromise = angular.IPromise;
-
-export interface Project {
-  id:number;
-  path_with_namespace:string;
-  builds_enabled:boolean;
-  [index:string]:any;
-}
-
-export interface Build {
-  id:number;
-  name:string;
-  ref:string;
-  created_at:string;
-  started_at:string;
-  finished_at:string;
-  derived:{
-    startedAt:number;
-    jobKey:string;
-    projectName:string;
-    id:string;
-  },
-  project:Project;
-  [index:string]:any;
-}
 
 export class BranchSummary {
   projects:ProjectSummary[] = [];
