@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "module": "system",
+    "target": "es5",
+    "noImplicitAny": false,
+    "outDir": "../dist",
+    "rootDir": ".",
+    "sourceMap": true
+  },
+  "compileOnSave": false,
+  "atom": {
+    "rewriteTsconfig": true
+  },
+  "formatCodeOptions": {
+    "indentSize": 2,
+    "tabSize": 2
+  }
+}

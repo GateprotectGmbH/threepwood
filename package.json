@@ -1,0 +1,70 @@
+{
+  "name": "gitlab",
+  "version": "1.0.0",
+  "description": "Gitlab Build Monitor",
+  "main": "index.js",
+  "scripts": {
+    "deps": "jspm install && typings --no-insight install",
+    "build": "rm -rf dist && npm run copy:all && npm run scss:init && npm run templates && tsc -p src",
+    "package": "node package-builder.js && gulp build",
+    "lint-ts": "tslint --config tslint.json --format verbose $(git ls-files -- '*.ts')",
+    "tsc:w": "tsc -p src -w",
+    "lite": "lite-server",
+    "start": "rm -rf dist && concurrent \"npm run copy:all\" \"npm run scss:init\" \"npm run tsc:w\" \"npm run lite\" \"npm run scss:w\" ",
+    "start:webstorm": "rm -rf dist && concurrent \"npm run copy:all\" \"npm run scss:init\" \"npm run lite\" \"npm run scss:w\" ",
+    "test": "npm run templates && karma start",
+    "templates": "gulp html:templates",
+    "test:w": "karma start --no-single-run",
+    "test:ci": "npm run test",
+    "scss:init": "node-sass src/styles/main.scss dist/styles/app.css",
+    "scss:w": "node-sass src/styles/main.scss dist/styles/app.css -w",
+    "copy:all": "copyfiles -f src/img/**/* dist/img && copyfiles -f src/svg/* dist/svg && copyfiles -f src/common/brand-logo/* dist/common/brand-logo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.lan.adytonsystems.com:monitors/gitlab.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "jspm": {
+    "dependencies": {
+      "angular": "github:angular/bower-angular@^1.5.0",
+      "angular-animate": "github:angular/bower-angular-animate@^1.5.0",
+      "angular-aria": "github:angular/bower-angular-aria@^1.5.0",
+      "angular-material": "github:angular/bower-material@^1.0.5",
+      "angular-messages": "github:angular/bower-angular-messages@^1.5.0",
+      "api-check": "npm:api-check@^7.5.5",
+      "css": "github:systemjs/plugin-css@^0.1.20",
+      "image": "github:systemjs/plugin-image@^0.1.0",
+      "parse-link-header": "npm:parse-link-header@^0.4.1"
+    },
+    "devDependencies": {
+      "angular-mocks": "github:angular/bower-angular-mocks@^1.5.0",
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "clean-css": "npm:clean-css@^3.4.9",
+      "core-js": "npm:core-js@^1.1.4"
+    }
+  },
+  "devDependencies": {
+    "browser-sync": "2.11.1",
+    "concurrently": "^1.0.0",
+    "copyfiles": "^0.2.1",
+    "del": "^2.2.0",
+    "es6-module-loader": "^0.17.10",
+    "gulp": "3.9.0",
+    "gulp-ng-templates": "0.0.6",
+    "jasmine-core": "^2.4.1",
+    "jspm": "^0.16.26",
+    "karma": "^0.13.19",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-jasmine": "^0.3.7",
+    "karma-systemjs": "^0.10.0",
+    "lite-server": "^2.0.1",
+    "node-sass": "^3.4.2",
+    "systemjs-builder": "^0.15.7",
+    "tslint": "^3.3.0",
+    "typescript": "^1.8.0",
+    "typings": "^0.6.8"
+  }
+}

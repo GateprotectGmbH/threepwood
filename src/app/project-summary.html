@@ -1,0 +1,4 @@
+<div md-whiteframe="1">
+  <h2 ng-bind="$ctrl.project.projectName"></h2>
+  <build-card ng-if="!$ctrl.project.success()" build="build" ng-repeat="build in $ctrl.project.builds"></build-card>
+</div>

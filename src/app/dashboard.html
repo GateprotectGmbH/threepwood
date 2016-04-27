@@ -1,0 +1,6 @@
+<h2>Projects</h2>
+<ul>
+  <li ng-repeat="project in $ctrl.projects" ng-bind="project.path_with_namespace"></li>
+</ul>
+
+<branch-summary branch="branch" ng-repeat="branch in $ctrl.branchSummaries"></branch-summary>

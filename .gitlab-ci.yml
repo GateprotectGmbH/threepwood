@@ -1,0 +1,24 @@
+image: gpmikep/docker-eye-test-ci
+
+variables:
+  JSPM_GITHUB_AUTH_TOKEN: Z3BtaWtlcDpkNDYyZjc5OWU0ODAwYmI3MjAyZWRjM2ZhZWI2Yzg2MDZiNzg5MmM0
+
+# per branch caching but not when building tags
+cache:
+  key: "$CI_BUILD_REF_NAME"
+  paths:
+    - node_modules/
+    - jspm_packages/
+    - typings/
+
+# install environment && build app && test && generate index.html
+build:
+  tags:
+    - docker
+  artifacts:
+    paths:
+      - dist/index.html
+  script:
+    - echo 'ok'
+#    - npm config set registry https://npm.lan.adytonsystems.com/
+#    - npm install && npm run deps && npm run build && npm run test:ci && npm run package

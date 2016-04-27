@@ -1,0 +1,28 @@
+<md-content md-theme="docs-dark">
+  <div>
+    <md-input-container class="md-block">
+      <label>Url</label>
+      <input ng-model="$ctrl.config.url">
+    </md-input-container>
+
+    <md-input-container class="md-block">
+      <label>Token</label>
+      <input ng-model="$ctrl.config.token">
+    </md-input-container>
+
+    <md-input-container class="md-block">
+      <label>Group/Project Wildcard</label>
+      <input ng-model="$ctrl.config.projectMatch">
+    </md-input-container>
+
+    <md-input-container class="md-block">
+      <label>Branch Wildcard</label>
+      <input ng-model="$ctrl.config.branchMatch">
+    </md-input-container>
+  </div>
+  <md-button
+    class="md-raised md-primary"
+    ng-click="$ctrl.save()">
+    Save
+  </md-button>
+</md-content>

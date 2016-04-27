@@ -1,0 +1,26 @@
+$content-padding: $baseline-grid;
+$base-font-size: 80%;
+$grid-sizes: $flex-grid-sizes;
+
+html {
+  font-size: $base-font-size;
+}
+
+.container {
+  margin-bottom: $content-padding;
+  padding: $content-padding;
+}
+
+.form-container {
+  md-input-container {
+    display: block;
+  }
+}
+
+.md-padding-table {
+  padding: 8px 0;
+
+  @media (min-width: 960px) {
+    padding: 16px 0;
+  }
+}
