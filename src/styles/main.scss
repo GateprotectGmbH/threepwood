@@ -6,3 +6,66 @@
 
 // Load Component Styles
 @import '../../jspm_packages/github/angular/bower-material@1.0.7/angular-material.min.css';
+
+.dashboard {
+  //color: white;
+  background-image: url(/dist/img/bg-image.png);
+  background-repeat: repeat;
+  height: 100%;
+  width: 100%;
+}
+
+.options-button {
+  font-size: 40pt;
+  top: 0;
+  left: 0;
+  width: 80px;
+  max-height: 80px;
+  position: fixed;
+  background-color: white;
+  text-align: center;
+  vertical-align: middle;
+  opacity: 0.5;
+  overflow-y: auto;
+}
+
+.options-button > a {
+  color: black;
+  text-decoration: none;
+}
+
+.branch-summary {
+  //margin: 25px;
+  padding: 25px;
+  background: transparent;
+  -webkit-box-shadow: 0 0 25px 8px rgba(0, 0, 0, 0.8);
+  -moz-box-shadow: 0 0 25px 8px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 25px 8px rgba(0, 0, 0, 0.8);
+  //width: 33%;
+  float: left;
+  //height: 25%;
+  position: relative;
+}
+
+.branch-name {
+  font-size: 20px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.project-summary {
+  font-size: 16px;
+  padding: 5px;
+}
+
+.success {
+  background-color: green;
+}
+
+.failed {
+  background-color: red;
+}
+
+.running {
+  background-color: blue;
+}

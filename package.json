@@ -18,7 +18,7 @@
     "test:ci": "npm run test",
     "scss:init": "node-sass src/styles/main.scss dist/styles/app.css",
     "scss:w": "node-sass src/styles/main.scss dist/styles/app.css -w",
-    "copy:all": "copyfiles -f src/img/**/* dist/img && copyfiles -f src/svg/* dist/svg && copyfiles -f src/common/brand-logo/* dist/common/brand-logo"
+    "copy:all": "copyfiles -f src/img/**/* dist/img && copyfiles -f src/svg/* dist/svg"
   },
   "repository": {
     "type": "git",

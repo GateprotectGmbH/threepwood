@@ -1,6 +1,8 @@
-<h2>Projects</h2>
-<ul>
-  <li ng-repeat="project in $ctrl.projects" ng-bind="project.path_with_namespace"></li>
-</ul>
-
-<branch-summary branch="branch" ng-repeat="branch in $ctrl.branchSummaries"></branch-summary>
+<div class="dashboard">
+  <md-toolbar>
+    <md-chips>
+      <md-chip ng-repeat="project in $ctrl.projects" ng-bind="project.path_with_namespace"></md-chip>
+    </md-chips>
+  </md-toolbar>
+  <branch-summary branch="branch" ng-repeat="branch in $ctrl.branchSummaries"></branch-summary>
+</div>

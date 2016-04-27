@@ -13,6 +13,30 @@ export class BranchSummary {
   add(projectSummary:ProjectSummary) {
     this.projects = this.projects.concat(projectSummary);
   }
+
+  theme():string {
+    if (this.success()) {
+      return 'success';
+    } else if (this.running()) {
+      return 'running';
+    } else if (this.failed()) {
+      return 'failed';
+    } else {
+      return 'default';
+    }
+  }
+
+  success():boolean {
+    return this.projects.every(project => project.success());
+  }
+
+  failed():boolean {
+    return !!this.projects.find(project => project.failed());
+  }
+
+  running():boolean {
+    return !!this.projects.find(project => project.running());
+  }
 }
 
 export class ProjectSummary {
@@ -22,13 +46,32 @@ export class ProjectSummary {
               public branchName:string) {
   }
 
+  theme():string {
+    if (this.success()) {
+      return 'success';
+    } else if (this.running()) {
+      return 'running';
+    } else if (this.failed()) {
+      return 'failed';
+    } else {
+      return 'default';
+    }
+  }
+  
   add(build:Build) {
     this.builds = this.builds.concat(build);
   }
-  
+
+  running():boolean {
+    return this.builds.filter(build => build.status === 'running').length > 0;
+  }
+
+  failed():boolean {
+    return this.builds.filter(build => build.status === 'failed').length > 0;
+  }
+
   success():boolean {
-    let notSuccess = this.builds.filter((build) => build.status !== 'success');
-    return notSuccess.length === 0;
+    return this.builds.every(build => build.status === 'success');
   }
 }
 

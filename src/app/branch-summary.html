@@ -1,4 +1,6 @@
-<div md-whiteframe="1">
-  <h2 ng-bind="$ctrl.branch.branchName"></h2>
-  <project-summary project="project" ng-repeat="project in $ctrl.branch.projects"></project-summary>
+<div class="branch-summary {{$ctrl.branch.theme()}}">
+  <div class="branch-name" ng-bind="$ctrl.branch.branchName"></div>
+  <div style="margin-top:10px;">
+    <project-summary project="project" ng-repeat="project in $ctrl.branch.projects"></project-summary>
+  </div>
 </div>
