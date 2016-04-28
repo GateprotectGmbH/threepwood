@@ -1,9 +1,8 @@
-FROM eye_chrome
+FROM docker-registry.lan.adytonsystems.com/node-4-phantomjs
 
-WORKDIR "/src"
-
-# copy current source
-# directory should match that of cache Dockerfile to enable caching
-COPY . /src
-
-CMD ["/src/ci.sh"]
+EXPOSE 3000
+ENV APP /app
+WORKDIR $APP
+COPY . $APP
+# necesssary while GP registry is down
+RUN npm config set registry https://registry.npmjs.org/

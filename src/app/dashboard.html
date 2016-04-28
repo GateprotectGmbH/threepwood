@@ -1,8 +1,3 @@
-<div class="dashboard">
-  <md-toolbar>
-    <md-chips>
-      <md-chip ng-repeat="project in $ctrl.projects" ng-bind="project.path_with_namespace"></md-chip>
-    </md-chips>
-  </md-toolbar>
-  <branch-summary branch="branch" ng-repeat="branch in $ctrl.branchSummaries"></branch-summary>
+<div class="dashboard" layout="row" flex="100">
+  <branch-summary flex="33" branch="branch" ng-repeat="branch in $ctrl.branchSummaries"></branch-summary>
 </div>

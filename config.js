@@ -28,7 +28,6 @@ System.config({
     "angular-animate": "github:angular/bower-angular-animate@1.5.5",
     "angular-aria": "github:angular/bower-angular-aria@1.5.5",
     "angular-component-router": "vendor/angular_1_router.js",
-    "angular-formly-material": "github:gpmikep/angular-formly-templates-material@0.14.2-gpfix1",
     "angular-material": "github:angular/bower-material@1.0.7",
     "angular-messages": "github:angular/bower-angular-messages@1.5.5",
     "angular-mocks": "github:angular/bower-angular-mocks@1.5.5",
@@ -39,7 +38,6 @@ System.config({
     "core-js": "npm:core-js@1.2.6",
     "css": "github:systemjs/plugin-css@0.1.21",
     "image": "github:systemjs/plugin-image@0.1.0",
-    "parse-link-header": "npm:parse-link-header@0.4.1",
     "github:angular/bower-angular-animate@1.5.5": {
       "angular": "github:angular/bower-angular@1.5.5"
     },
@@ -86,9 +84,6 @@ System.config({
     },
     "github:jspm/nodelibs-process@0.1.2": {
       "process": "npm:process@0.11.2"
-    },
-    "github:jspm/nodelibs-querystring@0.1.0": {
-      "querystring": "npm:querystring@0.2.0"
     },
     "github:jspm/nodelibs-stream@0.1.0": {
       "stream-browserify": "npm:stream-browserify@1.0.0"
@@ -160,11 +155,6 @@ System.config({
     },
     "npm:os-browserify@0.1.2": {
       "os": "github:jspm/nodelibs-os@0.1.0"
-    },
-    "npm:parse-link-header@0.4.1": {
-      "querystring": "github:jspm/nodelibs-querystring@0.1.0",
-      "url": "github:jspm/nodelibs-url@0.1.0",
-      "xtend": "npm:xtend@4.0.1"
     },
     "npm:path-browserify@0.0.0": {
       "process": "github:jspm/nodelibs-process@0.1.2"

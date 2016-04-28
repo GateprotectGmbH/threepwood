@@ -1,10 +1,18 @@
-cache:
-  build: docker/cache
-chrome:
-  build: docker/chrome
-ci:
-  build: .
-  volumes_from:
-    - cache
-  command:
-    - /src/ci.sh
+version: '2'
+services:
+  app:
+    build: .
+    volumes:
+      - node_modules_cache:/app/node_modules
+      - jspm_packages_cache:/app/jspm_packages
+      - typings_cache:/app/typings
+    command: npm run in:docker
+    ports:
+      - "3000:3000"
+    environment:
+      JSPM_GITHUB_AUTH_TOKEN: Z3BtaWtlcDpkNDYyZjc5OWU0ODAwYmI3MjAyZWRjM2ZhZWI2Yzg2MDZiNzg5MmM0
+
+volumes:
+  node_modules_cache: {}
+  jspm_packages_cache: {}
+  typings_cache: {}
