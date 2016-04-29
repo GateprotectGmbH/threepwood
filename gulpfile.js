@@ -19,8 +19,9 @@ gulp.task('build', function () {
   const build     = fs.readFileSync('./dist/build.js');
   const html1     = '<!DOCTYPE html><html' +
                     ' xmlns="http://www.w3.org/1999/xhtml"><head><meta' +
-                    ' charset="UTF-8"><base href="/"><title>Builds</title>';
-  const html2     = '</head><body ng-app="eye"><app></app></body></html>';
+                    ' charset="UTF-8"><base href="/"><title>Gitlab' +
+                    ' Build Monitor</title>';
+  const html2     = '</head><body ng-app="gitlab-monitor"><app></app></body></html>';
   const target    = './dist/index.html';
   var svg = 'angular.module("cc-templates").run([\n  "$templateCache",' +
           ' function ($templateCache) {\n    $templateCache.put("src/svg/icons.svg", \'ICONS\');\n    $templateCache.put("src/common/brand-logo/brand-logo.svg", \'LOGO\');}]);';

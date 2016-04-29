@@ -17,17 +17,10 @@ System.config({
     "es6-module-loader": "node_modules/es6-module-loader/dist/es6-module-loader.js"
   },
 
-  meta: {
-    "vendor/angular_1_router.js": {
-      "format": "global"
-    }
-  },
-
   map: {
     "angular": "github:angular/bower-angular@1.5.5",
     "angular-animate": "github:angular/bower-angular-animate@1.5.5",
     "angular-aria": "github:angular/bower-angular-aria@1.5.5",
-    "angular-component-router": "vendor/angular_1_router.js",
     "angular-material": "github:angular/bower-material@1.0.7",
     "angular-messages": "github:angular/bower-angular-messages@1.5.5",
     "angular-mocks": "github:angular/bower-angular-mocks@1.5.5",

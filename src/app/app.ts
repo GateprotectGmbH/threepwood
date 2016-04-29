@@ -1,6 +1,4 @@
 import 'angular';
-import 'angular-component-router';
-import {NotfoundModule} from './notfound';
 import {DashboardModule} from "./dashboard";
 import {SettingsModule} from "./settings";
 import {GitlabApiModule} from "./gitlab-api";
@@ -17,18 +15,13 @@ class App {
 }
 const AppComponent:ng.IComponentOptions = {
   templateUrl: 'src/app/app.html',
-  controller: App,
-  $routeConfig: [
-    {path: '/', component: 'dashboard', name: 'Dashboard', useAsDefault: true}
-  ]
+  controller: App
 };
 
 export var AppModule = angular
   .module('app', [
-    'ngComponentRouter',
     'ngMaterial',
     DashboardModule.name,
-    NotfoundModule.name,
     GitlabApiModule.name,
     SettingsModule.name
   ])

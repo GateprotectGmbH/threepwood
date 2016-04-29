@@ -1,5 +1,4 @@
 /// <reference path="../typings/browser.d.ts" />
-/// <reference path="../vendor/angular_1_router.d.ts" />
 
 import 'angular';
 import 'angular-material';
