@@ -1,14 +1,19 @@
 import 'angular';
 import {DashboardModule} from "./dashboard";
-import {SettingsModule} from "./settings";
+import {SettingsModule, SettingsService} from "./settings";
 import {GitlabApiModule} from "./gitlab-api";
 
 class App {
-  static $inject = ['$mdSidenav'];
+  static $inject = ['$mdSidenav', 'settingsService'];
 
-  constructor(private $mdSidenav:any) {
+  constructor(private $mdSidenav:any,
+              private settingsService:SettingsService) {
   }
 
+  configured():boolean {
+    return this.settingsService.configured();
+  }
+  
   openSettings() {
     this.$mdSidenav('sidenav').toggle();
   }
@@ -26,13 +31,19 @@ export var AppModule = angular
     SettingsModule.name
   ])
   .value('$routerRootComponent', 'app')
-  .config(function($mdThemingProvider) {
+  .config(function ($mdThemingProvider) {
     $mdThemingProvider.theme('success').backgroundPalette('green').dark()
   })
-  .config(function($mdThemingProvider) {
+  .config(function ($mdThemingProvider) {
     $mdThemingProvider.theme('running').backgroundPalette('blue').dark()
   })
-  .config(function($mdThemingProvider) {
+  .config(function ($mdThemingProvider) {
     $mdThemingProvider.theme('failed').backgroundPalette('red').dark()
+  })
+  .config(function ($mdThemingProvider) {
+    $mdThemingProvider.theme('cancelled').backgroundPalette('grey').dark()
+  })
+  .config(function ($mdThemingProvider) {
+    $mdThemingProvider.theme('unknown').backgroundPalette('yellow').dark()
   })
   .component('app', AppComponent);

@@ -34,23 +34,33 @@ export class BranchSummary {
   theme():string {
     if (this.success()) {
       return 'success';
-    } else if (this.running()) {
-      return 'running';
     } else if (this.failed()) {
       return 'failed';
+    } else if (this.cancelled()) {
+      return 'cancelled';
+    } else if (this.running()) {
+      return 'running';
     } else {
-      return 'default';
+      return 'unknown';
     }
   }
 
+  // if all success then success
   success():boolean {
     return this.projects.every(project => project.success());
   }
 
+  // if any failed then failed
   failed():boolean {
     return !!this.projects.find(project => project.failed());
   }
 
+  // if any cancelled then cancelled
+  cancelled():boolean {
+    return !!this.projects.find(project => project.cancelled());
+  }
+
+  // if any running then running
   running():boolean {
     return !!this.projects.find(project => project.running());
   }
@@ -66,12 +76,14 @@ export class ProjectSummary {
   theme():string {
     if (this.success()) {
       return 'success';
-    } else if (this.running()) {
-      return 'running';
     } else if (this.failed()) {
       return 'failed';
+    } else if (this.cancelled()) {
+      return 'cancelled';
+    } else if (this.running()) {
+      return 'running';
     } else {
-      return 'default';
+      return 'unknown';
     }
   }
 
@@ -79,14 +91,22 @@ export class ProjectSummary {
     this.builds = this.builds.concat(build);
   }
 
+  // if any running then status is running
   running():boolean {
     return this.builds.filter(build => build.status === 'running').length > 0;
   }
 
+  // if any failed then status is failed
   failed():boolean {
     return this.builds.filter(build => build.status === 'failed').length > 0;
   }
 
+  // if any cancelled then status is cancelled
+  cancelled():boolean {
+    return this.builds.filter(build => build.status === 'canceled').length > 0;
+  }
+
+  // if all success then status is success
   success():boolean {
     return this.builds.every(build => build.status === 'success');
   }

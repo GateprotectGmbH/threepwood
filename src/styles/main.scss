@@ -66,6 +66,8 @@ branch-summary {
 .project-summary {
   font-size: 23px;
   padding: 10px;
+  overflow: hidden;
+  white-space: nowrap;
   display: inline-block;
   margin: 7px;
 }

@@ -6,7 +6,7 @@ import IRootScopeService = angular.IRootScopeService;
 export class SettingsConfig {
   constructor(public url:string = 'https://gitlab.lan.adytonsystems.com',
               public token:string = '',
-              public projectMatch:string = '',
+              public projectMatch:string = 'web/web|web/bagel',
               public branchMatch:string = '') {
   }
 }
@@ -38,6 +38,12 @@ export class SettingsService {
       this.config = new SettingsConfig();
     }
     return this.config;
+  }
+
+  configured():boolean {
+    let config = this.load();
+    return config.url && config.url.toString().length > 0 &&
+      config.token && config.token.toString().length > 0;
   }
 }
 

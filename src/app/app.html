@@ -3,7 +3,12 @@
     <div class="settings-button" layout="column" ng-click="$ctrl.openSettings()">
       <a>&#9776;</a>
     </div>
-    <dashboard></dashboard>
+    <div ng-if="!$ctrl.configured()">
+      <div class="loading">
+        Please configure the app ->
+      </div>
+    </div>
+    <dashboard ng-if="$ctrl.configured()"></dashboard>
   </md-content>
   <settings></settings>
 </div>
