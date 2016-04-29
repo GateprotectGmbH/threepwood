@@ -22,7 +22,7 @@ export class SettingsService {
   save(config:SettingsConfig) {
     this.$window.localStorage.setItem('settings', JSON.stringify(config));
     this.config = null; // reload from storage on next load()
-    this.$rootScope.$emit('reload:projects');
+    this.$rootScope.$broadcast('reload:projects');
   }
 
   load():SettingsConfig {
