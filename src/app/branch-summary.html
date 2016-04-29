@@ -1,6 +1,9 @@
 <md-card md-theme="{{$ctrl.branch.theme()}}">
   <div class="branch-summary" >
-    <div class="branch-name" ng-bind="$ctrl.branch.branchName"></div>
+    <div class="branch-short-name" ng-bind="$ctrl.branch.shortName"></div>
+    <div class="branch-description">
+      {{$ctrl.branch.description}}&nbsp;
+    </div>
     <div>
       <project-summary project="project" ng-repeat="project in $ctrl.branch.projects"></project-summary>
     </div>

@@ -3,11 +3,28 @@ import {GitlabApiService, Build, Project} from "./gitlab-api";
 import {SettingsService} from "./settings";
 import IQService = angular.IQService;
 import IPromise = angular.IPromise;
+import IToastService = angular.material.IToastService;
 
 export class BranchSummary {
   projects:ProjectSummary[] = [];
+  shortName:string;
+  description:string;
+  issueId:string;
 
   constructor(public branchName:string) {
+    this.extractFromName(branchName);
+  }
+
+  extractFromName(name:string) {
+    let taskRegex = /^(.*-(\d+))(_|-)(.*)$/;
+    let matches = name.match(taskRegex);
+    if (matches) {
+      this.shortName = matches[1];
+      this.issueId = matches[2];
+      this.description = matches[4];
+    } else {
+      this.shortName = name;
+    }
   }
 
   add(projectSummary:ProjectSummary) {
@@ -57,7 +74,7 @@ export class ProjectSummary {
       return 'default';
     }
   }
-  
+
   add(build:Build) {
     this.builds = this.builds.concat(build);
   }
@@ -76,13 +93,13 @@ export class ProjectSummary {
 }
 
 export class BuildsService {
-  static $inject = ['gitlabApi', 'settingsService', '$q'];
+  static $inject = ['gitlabApi', 'settingsService', '$q', '$mdToast'];
 
   constructor(private gitlabApi:GitlabApiService,
               private settingsService:SettingsService,
-              private $q:IQService) {
+              private $q:IQService,
+              private $mdToast:IToastService) {
   }
-
 
   loadProjects():IPromise<Project[]> {
     let projectMatch = this.settingsService.load().projectMatch;
@@ -90,7 +107,15 @@ export class BuildsService {
     return this.gitlabApi.projects()
       .then(filterByProjectMatch)
       .then(filterByProjectHasBuilds)
+      .then(toastProjects.bind(this))
       .then(logResult('projects'));
+
+    function toastProjects(projects:Project[]):Project[] {
+      let names = projects.map(project => project.path_with_namespace);
+      let message = `Matched projects ${names.join(', ')}`;
+      this.$mdToast.showSimple(message);
+      return projects;
+    }
 
     function filterByProjectMatch(projects:Project[]):Project[] {
       let regex = new RegExp(projectMatch, 'i');
@@ -172,7 +197,7 @@ export class BuildsService {
       .then(flattenProjectSummaries)
       .then(convertToBranchSummaries);
 
-    function convertToBranchSummaries(projectSummaries: ProjectSummary[]):BranchSummary[] {
+    function convertToBranchSummaries(projectSummaries:ProjectSummary[]):BranchSummary[] {
       let branchSummaries:{[index:string]:BranchSummary} = {};
       projectSummaries.forEach((projectSummary) => {
         let branchName = projectSummary.branchName;

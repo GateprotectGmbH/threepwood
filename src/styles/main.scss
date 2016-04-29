@@ -5,11 +5,14 @@
 // Load Component Styles
 @import '../../jspm_packages/github/angular/bower-material@1.0.7/angular-material.min.css';
 
-.loading {
+.app {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
+}
+
+.loading {
   font-size: 60px;
 }
 
@@ -46,8 +49,15 @@ branch-summary {
   background: transparent;
 }
 
-.branch-name {
+.branch-short-name {
   font-size: 44px;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 10px;
+}
+
+.branch-description {
+  font-size: 34px;
   overflow: hidden;
   white-space: nowrap;
   padding: 10px;
@@ -61,11 +71,11 @@ branch-summary {
 }
 
 .success {
-  background-color: green;
+  background-color: #008f00;
 }
 
 .failed {
-  background-color: red;
+  background-color: #e00000;
 }
 
 .running {

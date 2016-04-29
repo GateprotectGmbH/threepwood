@@ -33,9 +33,6 @@ export var AppModule = angular
     SettingsModule.name
   ])
   .value('$routerRootComponent', 'app')
-  // .config(function ($mdThemingProvider) {
-  //   $mdThemingProvider.theme('default').dark();
-  // })
   .config(function($mdThemingProvider) {
     $mdThemingProvider.theme('success').backgroundPalette('green').dark()
   })
