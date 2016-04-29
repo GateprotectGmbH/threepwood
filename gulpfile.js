@@ -23,20 +23,10 @@ gulp.task('build', function () {
                     ' Build Monitor</title>';
   const html2     = '</head><body ng-app="gitlab-monitor"><app></app></body></html>';
   const target    = './dist/index.html';
-  var svg = 'angular.module("cc-templates").run([\n  "$templateCache",' +
-          ' function ($templateCache) {\n    $templateCache.put("src/svg/icons.svg", \'ICONS\');\n    $templateCache.put("src/common/brand-logo/brand-logo.svg", \'LOGO\');}]);';
-
-  const icons = fs.readFileSync('./dist/svg/icons.svg').toString().replace(/\n/g, '');
-  const logo = fs.readFileSync('./dist/common/brand-logo/brand-logo.svg').toString().replace(/\n/g, '');
-
-  svg = svg.replace(/LOGO/, logo);
-  svg = svg.replace(/ICONS/, icons);
-
   fs.writeFileSync(target, html1);
   fs.appendFileSync(target, "\n<script>\n");
   fs.appendFileSync(target, build);
   fs.appendFileSync(target, templates);
-  fs.appendFileSync(target, svg);
   fs.appendFileSync(target, "\n</script>\n");
   fs.appendFileSync(target, html2);
 });

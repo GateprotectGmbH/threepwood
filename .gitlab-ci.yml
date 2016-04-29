@@ -20,5 +20,5 @@ build:
       - dist/index.html
   script:
     - echo 'ok'
-#    - npm config set registry https://npm.lan.adytonsystems.com/
-#    - npm install && npm run deps && npm run build && npm run test:ci && npm run package
+    - npm config set registry https://npm.lan.adytonsystems.com/
+    - npm install && npm run deps && npm run build && npm run package
