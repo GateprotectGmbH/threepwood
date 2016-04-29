@@ -11,7 +11,7 @@ import './styles/app.css!';
 angular.module('cc-templates', []);
 
 angular
-  .module('gitlab', [
+  .module('gitlab-monitor', [
     AppModule.name,
     'cc-templates'
   ]);

@@ -11,17 +11,15 @@ class App {
   constructor(private $mdSidenav:any) {
   }
 
-  openLeftMenu() {
-    this.$mdSidenav('left').toggle();
+  openSettings() {
+    this.$mdSidenav('sidenav').toggle();
   }
 }
 const AppComponent:ng.IComponentOptions = {
   templateUrl: 'src/app/app.html',
   controller: App,
   $routeConfig: [
-    {path: '/', name: 'RootXX', redirectTo: ['Dashboard']},
-    {path: '/dashboard', component: 'dashboard', name: 'Dashboard', useAsDefault: true},
-    {path: '/**', component: 'notfound', name: 'NotFound'}
+    {path: '/', component: 'dashboard', name: 'Dashboard', useAsDefault: true}
   ]
 };
 
@@ -35,15 +33,9 @@ export var AppModule = angular
     SettingsModule.name
   ])
   .value('$routerRootComponent', 'app')
-  .config(function ($mdThemingProvider) {
-
-    // Configure a dark theme with primary foreground yellow
-
-    $mdThemingProvider.theme('docs-dark', 'default')
-      .primaryPalette('yellow')
-      .dark();
-
-  })
+  // .config(function ($mdThemingProvider) {
+  //   $mdThemingProvider.theme('default').dark();
+  // })
   .config(function($mdThemingProvider) {
     $mdThemingProvider.theme('success').backgroundPalette('green').dark()
   })

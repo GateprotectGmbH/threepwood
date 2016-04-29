@@ -2,12 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <base href="/">
-    <title>System Commander</title>
+    <title>GitLab Build Monitor</title>
     <link rel="stylesheet" href="dist/styles/app.css">
   </head>
-  <body ng-app="gitlab">
+  <body ng-app="gitlab-monitor">
 
-    <app></app>
+    <app>
+      <div class="loading">
+        <p>Loading app...</p>
+      </div>
+    </app>
 
     <script src="jspm_packages/system.js"></script>
     <script src="config.js"></script>

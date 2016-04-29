@@ -1,23 +1,31 @@
 // Load Prerequisits
 @import 'settings';
-
 // Load Global Styles
 @import 'layout';
-
 // Load Component Styles
 @import '../../jspm_packages/github/angular/bower-material@1.0.7/angular-material.min.css';
+
+.loading {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;
+}
 
 .dashboard {
   color: white;
   background-image: url(/dist/img/bg-image.png);
   background-repeat: repeat;
   flex-wrap: wrap;
+  align-content: space-around;
+  justify-content: space-around;
 }
 
-.options-button {
+.settings-button {
   font-size: 40pt;
   top: 0;
-  left: 0;
+  right: 0;
   width: 80px;
   max-height: 80px;
   position: fixed;
@@ -28,7 +36,7 @@
   overflow-y: auto;
 }
 
-.options-button > a {
+.settings-button > a {
   color: black;
   text-decoration: none;
 }
@@ -62,4 +70,17 @@ branch-summary {
 
 .running {
   background-color: blue;
+}
+
+// override sidenav size be be bigger
+md-sidenav,
+md-sidenav.md-locked-open,
+md-sidenav.md-closed.md-locked-open-add-active {
+  min-width: 0px !important;
+  width: 50% !important;
+  max-width: none !important;
+}
+
+form {
+  font-size: 20px;
 }

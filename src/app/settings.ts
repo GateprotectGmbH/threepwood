@@ -1,6 +1,7 @@
 import 'angular';
 import IWindowService = angular.IWindowService;
 import ISidenavService = angular.material.ISidenavService;
+import IRootScopeService = angular.IRootScopeService;
 
 export class SettingsConfig {
   constructor(public url:string = 'https://gitlab.lan.adytonsystems.com',
@@ -11,15 +12,17 @@ export class SettingsConfig {
 }
 
 export class SettingsService {
-  static $inject = ['$window'];
+  static $inject = ['$window', '$rootScope'];
   config:SettingsConfig;
 
-  constructor(private $window:IWindowService) {
+  constructor(private $window:IWindowService,
+              private $rootScope:IRootScopeService) {
   }
 
   save(config:SettingsConfig) {
     this.$window.localStorage.setItem('settings', JSON.stringify(config));
-    this.config = null;
+    this.config = null; // reload from storage on next load()
+    this.$rootScope.$emit('reload:projects');
   }
 
   load():SettingsConfig {
@@ -49,7 +52,7 @@ class Settings {
   save() {
     console.log('saving ', this.config);
     this.settingsService.save(this.config);
-    this.$mdSidenav('left').close();
+    this.$mdSidenav('sidenav').close();
   }
 }
 

@@ -1,11 +1,9 @@
-<div layout="row">
-  <md-sidenav md-component-id="left" class="md-sidenav-left">
-    <settings></settings>
-  </md-sidenav>
-  <md-content flex="100">
-    <md-button ng-click="$ctrl.openLeftMenu()" class="options-button">
-      =
-    </md-button>
+<div layout="row" flex="100">
+  <md-content>
+    <div class="settings-button" layout="column" ng-click="$ctrl.openSettings()">
+      <a>&#9776;</a>
+    </div>
     <div ng-outlet></div>
   </md-content>
+  <settings></settings>
 </div>

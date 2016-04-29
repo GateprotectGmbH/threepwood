@@ -46,7 +46,7 @@ module.exports = function(config) {
       // Add any additional configuration, such as mappings to modules only used in testing
       config: {
         paths: {
-          'angular-mocks': 'jspm_packages/github/angular/bower-angular-mocks@1.5.0-rc.2/angular-mocks.js',
+          'angular-mocks': 'jspm_packages/github/angular/bower-angular-mocks@1.5.5/angular-mocks.js',
           'cc-templates': 'dist/cc-templates.js'
         }
       }
