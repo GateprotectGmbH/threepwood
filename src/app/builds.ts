@@ -4,7 +4,7 @@ import IQService = angular.IQService;
 import IPromise = angular.IPromise;
 import IToastService = angular.material.IToastService;
 
-export class BranchSummary {
+export class Branch {
   projects:ProjectSummary[] = [];
   shortName:string;
   description:string;
@@ -205,23 +205,23 @@ export class BuildsService {
     }
   }
 
-  loadBranchSummaries(projects:Project[], branchMatch:string):IPromise<BranchSummary[]> {
+  loadBranches(projects:Project[], branchMatch:string):IPromise<Branch[]> {
     let promises = projects.map((project) => this.loadProjectSummaries(project, branchMatch));
     return this.$q.all(promises)
       .then(flattenProjectSummaries)
-      .then(convertToBranchSummaries);
+      .then(convertToBranches);
 
-    function convertToBranchSummaries(projectSummaries:ProjectSummary[]):BranchSummary[] {
-      let branchSummaries:{[index:string]:BranchSummary} = {};
+    function convertToBranches(projectSummaries:ProjectSummary[]):Branch[] {
+      let branches:{[index:string]:Branch} = {};
       projectSummaries.forEach((projectSummary) => {
         let branchName = projectSummary.branchName;
-        let branchSummary = branchSummaries[branchName];
+        let branchSummary = branches[branchName];
         if (!branchSummary) {
-          branchSummary = branchSummaries[branchName] = new BranchSummary(branchName);
+          branchSummary = branches[branchName] = new Branch(branchName);
         }
         branchSummary.add(projectSummary);
       });
-      return Object.keys(branchSummaries).map((key) => branchSummaries[key]);
+      return Object.keys(branches).map((key) => branches[key]);
     }
 
     function flattenProjectSummaries(projectsSummaries:Array<ProjectSummary[]>):ProjectSummary[] {

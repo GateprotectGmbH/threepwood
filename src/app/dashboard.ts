@@ -1,5 +1,5 @@
 import 'angular';
-import {BuildsService, BuildsModule, BranchSummary} from "./builds";
+import {BuildsService, BuildsModule, Branch} from "./builds";
 import IQService = angular.IQService;
 import IPromise = angular.IPromise;
 import {BranchSummaryModule} from "./branch-summary";
@@ -15,7 +15,7 @@ class Dashboard {
   static $inject = ['buildsService', '$q', '$scope', '$interval'];
 
   projects:Project[] = [];
-  branchSummaries:BranchSummary[] = [];
+  branches:Branch[] = [];
 
   loading:string = 'Loading matching projects..';
   skipLoadBranchSummary:boolean;
@@ -70,9 +70,9 @@ class Dashboard {
     console.log('loading branch summaries..');
     // to avoid multiple in-flight branch queries
     this.skipLoadBranchSummary = true;
-    this.buildsService.loadBranchSummaries(this.projects, this.config.branchMatch)
+    this.buildsService.loadBranches(this.projects, this.config.branchMatch)
       .then((branchSummaries) => {
-        this.branchSummaries = branchSummaries;
+        this.branches = branchSummaries;
         this.loading = undefined;
       })
       .finally(() => {
