@@ -6,6 +6,7 @@ import {BranchSummaryModule} from "./branch-summary";
 import {Project} from "./gitlab-api";
 import IScope = angular.IScope;
 import IIntervalService = angular.IIntervalService;
+import {SettingsConfig} from "./settings";
 
 class Dashboard {
   static PROJECTS_RELOAD_INTERVAL = 60 * 60 * 1000; // ms
@@ -18,6 +19,8 @@ class Dashboard {
 
   loading:string = 'Loading matching projects..';
   skipLoadBranchSummary:boolean;
+  
+  config:SettingsConfig;
 
   constructor(private buildsService:BuildsService,
               private $q:IQService,
@@ -40,7 +43,7 @@ class Dashboard {
   loadProjects() {
     console.log('loading projects..');
     this.skipLoadBranchSummary = true;
-    this.buildsService.loadProjects()
+    this.buildsService.loadProjects(this.config.projectMatch)
       .then((projects) => {
         this.skipLoadBranchSummary = false;
         this.projects = projects;
@@ -80,7 +83,10 @@ class Dashboard {
 
 const DashboardComponent:ng.IComponentOptions = {
   templateUrl: 'src/app/dashboard.html',
-  controller: Dashboard
+  controller: Dashboard,
+  bindings: {
+    config: '<'
+  }
 };
 
 export const DashboardModule = angular

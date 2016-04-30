@@ -121,9 +121,7 @@ export class BuildsService {
               private $mdToast:IToastService) {
   }
 
-  loadProjects():IPromise<Project[]> {
-    let projectMatch = this.settingsService.load().projectMatch;
-
+  loadProjects(projectMatch:string):IPromise<Project[]> {
     return this.gitlabApi.projects()
       .then(filterByProjectMatch)
       .then(filterByProjectHasBuilds)

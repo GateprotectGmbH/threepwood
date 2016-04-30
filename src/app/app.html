@@ -8,7 +8,7 @@
         Please configure the app ->
       </div>
     </div>
-    <dashboard ng-if="$ctrl.configured()"></dashboard>
+    <dashboard ng-if="$ctrl.configured()" config="$ctrl.settingsConfig()"></dashboard>
   </md-content>
   <settings></settings>
 </div>

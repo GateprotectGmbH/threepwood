@@ -1,6 +1,6 @@
 import 'angular';
 import {DashboardModule} from "./dashboard";
-import {SettingsModule, SettingsService} from "./settings";
+import {SettingsModule, SettingsService, SettingsConfig} from "./settings";
 import {GitlabApiModule} from "./gitlab-api";
 
 class App {
@@ -16,6 +16,10 @@ class App {
   
   openSettings() {
     this.$mdSidenav('sidenav').toggle();
+  }
+  
+  settingsConfig():SettingsConfig {
+    return this.settingsService.load();
   }
 }
 const AppComponent:ng.IComponentOptions = {
