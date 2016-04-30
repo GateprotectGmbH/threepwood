@@ -70,7 +70,7 @@ class Dashboard {
     console.log('loading branch summaries..');
     // to avoid multiple in-flight branch queries
     this.skipLoadBranchSummary = true;
-    this.buildsService.loadBranchSummaries(this.projects)
+    this.buildsService.loadBranchSummaries(this.projects, this.config.branchMatch)
       .then((branchSummaries) => {
         this.branchSummaries = branchSummaries;
         this.loading = undefined;

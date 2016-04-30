@@ -1,6 +1,5 @@
 import 'angular';
 import {GitlabApiService, Build, Project} from "./gitlab-api";
-import {SettingsService} from "./settings";
 import IQService = angular.IQService;
 import IPromise = angular.IPromise;
 import IToastService = angular.material.IToastService;
@@ -113,10 +112,9 @@ export class ProjectSummary {
 }
 
 export class BuildsService {
-  static $inject = ['gitlabApi', 'settingsService', '$q', '$mdToast'];
+  static $inject = ['gitlabApi', '$q', '$mdToast'];
 
   constructor(private gitlabApi:GitlabApiService,
-              private settingsService:SettingsService,
               private $q:IQService,
               private $mdToast:IToastService) {
   }
@@ -145,9 +143,7 @@ export class BuildsService {
     }
   }
 
-  loadProjectSummaries(project:Project):IPromise<ProjectSummary[]> {
-    let branchMatch = this.settingsService.load().branchMatch;
-
+  loadProjectSummaries(project:Project, branchMatch:string):IPromise<ProjectSummary[]> {
     return this.gitlabApi.builds(project.id)
       .then(filterByBranchMatch)
       .then(addProject)
@@ -209,8 +205,8 @@ export class BuildsService {
     }
   }
 
-  loadBranchSummaries(projects:Project[]):IPromise<BranchSummary[]> {
-    let promises = projects.map((project) => this.loadProjectSummaries(project));
+  loadBranchSummaries(projects:Project[], branchMatch:string):IPromise<BranchSummary[]> {
+    let promises = projects.map((project) => this.loadProjectSummaries(project, branchMatch));
     return this.$q.all(promises)
       .then(flattenProjectSummaries)
       .then(convertToBranchSummaries);
