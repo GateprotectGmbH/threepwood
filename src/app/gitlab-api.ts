@@ -10,6 +10,7 @@ import IHttpPromiseCallbackArg = angular.IHttpPromiseCallbackArg;
 
 type Records = Array<{[index:string]:any}>;
 
+// gitlab project entity
 export interface Project {
   id:number;
   path_with_namespace:string;
@@ -17,6 +18,7 @@ export interface Project {
   [index:string]:any;
 }
 
+// gitlab build entity
 export interface Build {
   id:number;
   name:string;
@@ -45,6 +47,7 @@ export class GitlabApiService {
               private $q:IQService) {
   }
 
+  // return default $http config object
   config():IRequestConfig {
     let settings = this.settingsService.load();
     return {
@@ -56,19 +59,21 @@ export class GitlabApiService {
     };
   }
 
+  // get records specified by config. auto-get every subsequent page for a paged interface.
+  // returns all pages of records as a single array.
   getByConfig(config:IRequestConfig):IPromise<Records> {
     console.log('GET', config);
     return this.$http<Records>(config)
       .then((result:IHttpPromiseCallbackArg<Records>):IPromise<Records> => {
         console.log('GOT', result);
         let link = result.headers('link');
-        let url = this.nextPage(link);
-        console.log('nextPage', url);
+        let url = this.nextPageUrl(link);
+        console.log('nextPageUrl', url);
         if (url) {
           let config = this.config();
           config.url = url;
           return this.getByConfig(config)
-            .then((nextPage:Records):Records => result.data.concat(nextPage));
+            .then((nextPageUrl:Records):Records => result.data.concat(nextPageUrl));
         } else {
           return this.$q.when(result.data);
         }
@@ -82,6 +87,7 @@ export class GitlabApiService {
       })
   }
 
+  // query for records from url. assume a paged interface and default to 1st page and 100 records
   get(url:string, page:number = 1, perPage:number = 100):IPromise<Records> {
     let config = this.config();
     config.url += url;
@@ -92,17 +98,20 @@ export class GitlabApiService {
     return this.getByConfig(config);
   }
 
-  nextPage(link):string {
+  // extract next page url from link
+  nextPageUrl(link):string {
     if (link) {
       let matches = link.match(/<([^>]+)>; rel="next"/);
       return matches && matches[1];
     }
   }
 
+  // query gitlab for all builds within project
   builds(projectId:number):IPromise<Build[]> {
     return this.get(`/api/v3/projects/${projectId}/builds`);
   }
 
+  // query gitlab for all projects
   projects():IPromise<Project[]> {
     return this.get('/api/v3/projects');
   }

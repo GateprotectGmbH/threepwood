@@ -10,7 +10,7 @@
     "lint-ts": "tslint --config tslint.json --format verbose $(git ls-files -- '*.ts')",
     "tsc:w": "tsc -p src -w",
     "lite": "lite-server",
-    "start": "rm -rf dist && concurrent \"npm run copy:all\" \"npm run scss:init\" \"npm run tsc:w\" \"npm run lite\" \"npm run scss:w\" ",
+    "start": "npm run build && concurrent \"npm run tsc:w\" \"npm run scss:w\" \"npm run lite\" ",
     "start:webstorm": "rm -rf dist && concurrent \"npm run copy:all\" \"npm run scss:init\" \"npm run lite\" \"npm run scss:w\" ",
     "test": "npm run templates && karma start",
     "templates": "gulp html:templates",
