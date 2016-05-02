@@ -36,13 +36,6 @@ export interface Build {
     title:string;
     message:string;
   }
-  derived:{
-    startedAt:number;
-    jobKey:string;
-    projectName:string;
-    id:string;
-  },
-  project:Project;
   [index:string]:any;
 }
 
