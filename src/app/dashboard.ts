@@ -2,7 +2,7 @@ import 'angular';
 import {BuildsService, BuildsModule, Branch} from "./builds";
 import IQService = angular.IQService;
 import IPromise = angular.IPromise;
-import {BranchSummaryModule} from "./branch-summary";
+import {BranchCardModule} from "./branch-card";
 import {Project} from "./gitlab-api";
 import IScope = angular.IScope;
 import IIntervalService = angular.IIntervalService;
@@ -91,7 +91,7 @@ const DashboardComponent:ng.IComponentOptions = {
 
 export const DashboardModule = angular
   .module('dashboard', [
-    BranchSummaryModule.name,
+    BranchCardModule.name,
     BuildsModule.name
   ])
   .component('dashboard', DashboardComponent);

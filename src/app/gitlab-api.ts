@@ -27,6 +27,15 @@ export interface Build {
   created_at:string;
   started_at:string;
   finished_at:string;
+  commit: {
+    id:string;
+    author_name:string;
+    author_email:string;
+    created_at:string;
+    short_id:string;
+    title:string;
+    message:string;
+  }
   derived:{
     startedAt:number;
     jobKey:string;

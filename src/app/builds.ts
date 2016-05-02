@@ -1,11 +1,19 @@
 import 'angular';
-import {GitlabApiService, Build, Project} from "./gitlab-api";
+import {GitlabApiService, Project, Build} from "./gitlab-api";
 import IQService = angular.IQService;
 import IPromise = angular.IPromise;
 import IToastService = angular.material.IToastService;
 
-export class Branch {
-  projects:ProjectSummary[] = [];
+interface Status {
+  theme():string;
+  success():boolean;
+  failed():boolean;
+  cancelled():boolean;
+  running():boolean;
+}
+
+export class Branch implements Status {
+  _commits:CommitIndexByProjectName = {};
   shortName:string;
   description:string;
   issueId:string;
@@ -26,10 +34,6 @@ export class Branch {
     }
   }
 
-  add(projectSummary:ProjectSummary) {
-    this.projects = this.projects.concat(projectSummary);
-  }
-
   theme():string {
     if (this.success()) {
       return 'success';
@@ -44,31 +48,79 @@ export class Branch {
     }
   }
 
+  projectNames():string[] {
+    return Object.keys(this._commits);
+  }
+
+  commit(projectName:string):Commit {
+    return this._commits[projectName];
+  }
+
+  addCommit(projectName:string, commit:Commit) {
+    this._commits[projectName] = commit;
+  }
+
+  commits():Commit[] {
+    return this.projectNames().map(key => this._commits[key]);
+  }
+
   // if all success then success
   success():boolean {
-    return this.projects.every(project => project.success());
+    return this.commits().every(commit => commit.success());
   }
 
   // if any failed then failed
   failed():boolean {
-    return !!this.projects.find(project => project.failed());
+    return !!this.commits().find(commit => commit.failed());
   }
 
   // if any cancelled then cancelled
   cancelled():boolean {
-    return !!this.projects.find(project => project.cancelled());
+    return !!this.commits().find(commit => commit.cancelled());
   }
 
   // if any running then running
   running():boolean {
-    return !!this.projects.find(project => project.running());
+    return !!this.commits().find(commit => commit.running());
+  }
+}
+type UniqBranches = {[index:string]:Branch};
+
+export class CommitBuild {
+  id:string;
+  branchName:string;
+  startedAt:number;
+  jobKey:string;
+  commitId:string;
+  running:boolean;
+  failed:boolean;
+  cancelled:boolean;
+  success:boolean;
+
+  constructor(private build:Build) {
+    this.startedAt = new Date(build.started_at).getTime();
+    this.branchName = build.ref;
+    this.jobKey = `${build.ref}/${build.name}`;
+    this.commitId = this.build.commit.id;
+    this.id = `${this.commitId}/${build.id}`;
+    this.running = this.build.status === 'running';
+    this.failed = this.build.status === 'failed';
+    this.cancelled = this.build.status === 'canceled'; // american spelling
+    this.success = this.build.status === 'success';
+  }
+
+  // return true if match is a regexp string that matches the branch name 
+  branchNameMatch(match:string):boolean {
+    let regex = new RegExp(match, 'i');
+    return regex.test(this.branchName);
   }
 }
 
-export class ProjectSummary {
-  builds:Build[] = [];
+export class Commit implements Status {
+  builds:CommitBuild[] = [];
 
-  constructor(public projectName:string,
+  constructor(public id:string,
+              public projectName:string,
               public branchName:string) {
   }
 
@@ -86,30 +138,27 @@ export class ProjectSummary {
     }
   }
 
-  add(build:Build) {
-    this.builds = this.builds.concat(build);
-  }
-
   // if any running then status is running
   running():boolean {
-    return this.builds.filter(build => build.status === 'running').length > 0;
+    return this.builds.filter(build => build.running).length > 0;
   }
 
   // if any failed then status is failed
   failed():boolean {
-    return this.builds.filter(build => build.status === 'failed').length > 0;
+    return this.builds.filter(build => build.failed).length > 0;
   }
 
   // if any cancelled then status is cancelled
   cancelled():boolean {
-    return this.builds.filter(build => build.status === 'canceled').length > 0;
+    return this.builds.filter(build => build.cancelled).length > 0;
   }
 
   // if all success then status is success
   success():boolean {
-    return this.builds.every(build => build.status === 'success');
+    return this.builds.every(build => build.success);
   }
 }
+type CommitIndexByProjectName = {[index:string]:Commit};
 
 export class BuildsService {
   static $inject = ['gitlabApi', '$q', '$mdToast'];
@@ -143,96 +192,78 @@ export class BuildsService {
     }
   }
 
-  loadProjectSummaries(project:Project, branchMatch:string):IPromise<ProjectSummary[]> {
+  loadCommitBuilds(project:Project, branchMatch:string):IPromise<CommitBuild[]> {
     return this.gitlabApi.builds(project.id)
-      .then(filterByBranchMatch)
-      .then(addProject)
-      .then(addDerived)
+      .then(convertToCommitBuilds)
+      .then(filterByBranchNameMatch)
       .then(orderByStartedAtDescending)
       .then(filterByMostRecentBranchJob)
-      .then(convertToProjectSummaries)
-      .then(logResult('projectSummary'));
+      .then(logResult('commitBuilds'));
 
-    function convertToProjectSummaries(builds:Build[]):ProjectSummary[] {
-      let projectSummaries:{[index:string]:ProjectSummary} = {};
-      builds.forEach((build) => {
-        let branchName = build.ref;
-        let projectName = build.derived.projectName;
-        let summary = projectSummaries[branchName];
-        if (!summary) {
-          summary = projectSummaries[branchName] = new ProjectSummary(projectName, branchName);
-        }
-        summary.add(build);
-      });
-      return Object.keys(projectSummaries).map((key) => projectSummaries[key]);
+    function convertToCommitBuilds(builds:Build[]):CommitBuild[] {
+      return builds.map(build => new CommitBuild(build));
     }
 
-    function orderByStartedAtDescending(builds:Build[]):Build[] {
-      return builds.sort((a, b) => b.derived.startedAt - a.derived.startedAt);
+    function filterByBranchNameMatch(commitBuilds:CommitBuild[]):CommitBuild[] {
+      return commitBuilds.filter(build => build.branchNameMatch(branchMatch));
     }
 
-    function addDerived(builds:Build[]):Build[] {
-      builds.forEach((build) => {
-        build.derived = {
-          startedAt: new Date(build.started_at).getTime(),
-          jobKey: `${build.ref}/${build.name}`,
-          projectName: build.project.path_with_namespace,
-          id: `${build.project.path_with_namespace}/${build.id}`
-        }
-      });
-      return builds;
+    function orderByStartedAtDescending(commitBuilds:CommitBuild[]):CommitBuild[] {
+      return commitBuilds.sort((a, b) => b.startedAt - a.startedAt);
     }
 
-    function filterByBranchMatch(builds:Build[]):Build[] {
-      let regex = new RegExp(branchMatch, 'i');
-      return builds.filter((build) => regex.test(build.ref));
-    }
-
-    function filterByMostRecentBranchJob(builds:Build[]):Build[] {
+    function filterByMostRecentBranchJob(commitBuilds:CommitBuild[]):CommitBuild[] {
       let seen = {};
-      return builds.filter((build) => {
-        if (seen[build.derived.jobKey]) {
+      return commitBuilds.filter((commitBuild) => {
+        if (seen[commitBuild.jobKey]) {
           return false;
         }
-        seen[build.derived.jobKey] = true;
+        seen[commitBuild.jobKey] = true;
         return true;
       })
     }
+  }
 
-    function addProject(builds:Build[]):Build[] {
-      builds.forEach((build) => build.project = project);
-      return builds;
+  updateBranches(branches:UniqBranches, project:Project, branchMatch:string):IPromise<CommitBuild[]> {
+    return this.loadCommitBuilds(project, branchMatch)
+      .then(addBranches)
+      .then(addCommitsToBranches);
+
+    function addBranches(commitBuilds:CommitBuild[]):CommitBuild[] {
+      commitBuilds.forEach((build) => {
+        let branch = branches[build.branchName];
+        if (!branch) {
+          branches[build.branchName] = new Branch(build.branchName);
+        }
+      });
+      return commitBuilds;
+    }
+
+    function addCommitsToBranches(commitBuilds:CommitBuild[]):CommitBuild[] {
+      commitBuilds.forEach((build) => {
+        let branch = branches[build.branchName];
+        let projectName = project.path_with_namespace;
+        let commit = branch.commit(projectName);
+        if (!commit) {
+          commit = new Commit(build.commitId, projectName, build.branchName);
+          branch.addCommit(projectName, commit);
+        }
+        commit.builds.push(build);
+      });
+      return commitBuilds;
     }
   }
 
   loadBranches(projects:Project[], branchMatch:string):IPromise<Branch[]> {
-    let promises = projects.map((project) => this.loadProjectSummaries(project, branchMatch));
+    let branches:UniqBranches = {};
+    let promises = projects.map(project => this.updateBranches(branches, project, branchMatch));
     return this.$q.all(promises)
-      .then(flattenProjectSummaries)
-      .then(convertToBranches);
+      .then(arrayOfBranches);
 
-    function convertToBranches(projectSummaries:ProjectSummary[]):Branch[] {
-      let branches:{[index:string]:Branch} = {};
-      projectSummaries.forEach((projectSummary) => {
-        let branchName = projectSummary.branchName;
-        let branchSummary = branches[branchName];
-        if (!branchSummary) {
-          branchSummary = branches[branchName] = new Branch(branchName);
-        }
-        branchSummary.add(projectSummary);
-      });
-      return Object.keys(branches).map((key) => branches[key]);
-    }
-
-    function flattenProjectSummaries(projectsSummaries:Array<ProjectSummary[]>):ProjectSummary[] {
-      if (projectsSummaries.length) {
-        return projectsSummaries.reduce((a, b) => a.concat(b));
-      } else {
-        return [];
-      }
+    function arrayOfBranches():Branch[] {
+      return Object.keys(branches).map(key => branches[key]);
     }
   }
-
 }
 
 function logResult(message) {

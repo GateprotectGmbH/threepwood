@@ -2,5 +2,5 @@
   <p ng-bind="$ctrl.loading"></p>
 </div>
 <div class="dashboard" layout="row" flex="100">
-  <branch-summary flex="33" branch="branch" ng-repeat="branch in $ctrl.branches"></branch-summary>
+  <branch-card class="branch-card" flex="33" branch="branch" ng-repeat="branch in $ctrl.branches"></branch-card>
 </div>
