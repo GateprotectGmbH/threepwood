@@ -4,7 +4,7 @@
     <div class="branch-description">
       {{$ctrl.branch.description}}&nbsp;
     </div>
-    <div>
+    <div class="projects" style="font-size: {{$ctrl.projectNameFontSize()}};">
       <span
         ng-repeat="commit in $ctrl.branch.commits()"
         class="project-name {{commit.theme()}}">

@@ -1,6 +1,8 @@
 <div ng-if="$ctrl.loading" class="loading">
   <p ng-bind="$ctrl.loading"></p>
 </div>
-<div class="dashboard" layout="row" flex="100">
-  <branch-card class="branch-card" flex="33" branch="branch" ng-repeat="branch in $ctrl.branches"></branch-card>
+<div class="dashboard" layout="column">
+  <div layout="row" class="dashboard-row" ng-repeat="row in $ctrl.rows">
+    <branch-card branch="branch" ng-repeat="branch in $ctrl.row(row)"></branch-card>
+  </div>
 </div>
