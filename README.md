@@ -18,15 +18,20 @@ npm install && npm run deps
 npm start
 ```
 
-#### Run tests once
+Monitor is located at `http://localhost:3000/`
+
+
+### CI equivalent build
 
 ```sh
-npm test
+docker-compose up --build
 ```
 
-### CI equivalent tests
+Monitor is located at `http://gitlab-monitor.docker` (MacOS using dingy) or `http://localhost:3000` (Linux).
+
+
+### Build standalone dist/index.html file
 
 ```sh
-docker-compose build
-docker-compose up
+npm install && npm run deps && npm run build && npm run package
 ```
