@@ -19,5 +19,4 @@ build:
     paths:
       - dist/index.html
   script:
-    - npm run clean
     - npm install && npm run deps && npm run build && npm run package
