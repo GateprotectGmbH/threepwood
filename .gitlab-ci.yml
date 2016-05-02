@@ -19,4 +19,6 @@ build:
     paths:
       - dist/index.html
   script:
+    - id && ls -la node_modules && ls -la node_modules/.bin
+    - npm run clean
     - npm install && npm run deps && npm run build && npm run package

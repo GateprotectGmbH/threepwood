@@ -19,7 +19,7 @@
     "scss:init": "node-sass src/styles/main.scss dist/styles/app.css",
     "scss:w": "node-sass src/styles/main.scss dist/styles/app.css -w",
     "in:docker": "sudo chown -R ${NORMAL_USER}:${NORMAL_GROUP} . && npm install && npm run deps && npm run start",
-    "clean": "rm -rf dist node_modules/* node_modules/.bin jspm_packages/* typings/*"
+    "clean": "sudo rm -rf dist node_modules/* node_modules/.bin jspm_packages/* typings/*"
   },
   "repository": {
     "type": "git",
