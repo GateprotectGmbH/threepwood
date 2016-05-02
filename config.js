@@ -1,5 +1,4 @@
 System.config({
-  baseURL: "/",
   defaultJSExtensions: true,
   transpiler: "babel",
   babelOptions: {
@@ -10,18 +9,14 @@ System.config({
   },
   paths: {
     "github:*": "jspm_packages/github/*",
-    "npm:*": "jspm_packages/npm/*",
-    "babel": "node_modules/babel-core/browser.js",
-    "systemjs": "jspm_packages/system.js",
-    "system-polyfills": "jspm_packages/system-polyfills.js",
-    "es6-module-loader": "node_modules/es6-module-loader/dist/es6-module-loader.js"
+    "npm:*": "jspm_packages/npm/*"
   },
 
   map: {
     "angular": "github:angular/bower-angular@1.5.5",
     "angular-animate": "github:angular/bower-angular-animate@1.5.5",
     "angular-aria": "github:angular/bower-angular-aria@1.5.5",
-    "angular-material": "github:angular/bower-material@1.0.7",
+    "angular-material": "github:angular/bower-material@1.0.8",
     "angular-messages": "github:angular/bower-angular-messages@1.5.5",
     "angular-mocks": "github:angular/bower-angular-mocks@1.5.5",
     "api-check": "npm:api-check@7.5.5",
@@ -43,7 +38,7 @@ System.config({
     "github:angular/bower-angular-mocks@1.5.5": {
       "angular": "github:angular/bower-angular@1.5.5"
     },
-    "github:angular/bower-material@1.0.7": {
+    "github:angular/bower-material@1.0.8": {
       "angular": "github:angular/bower-angular@1.5.5",
       "angular-animate": "github:angular/bower-angular-animate@1.5.5",
       "angular-aria": "github:angular/bower-angular-aria@1.5.5",
