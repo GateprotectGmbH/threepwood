@@ -1,4 +1,4 @@
-image: gpmikep/docker-eye-test-ci
+image: docker-registry.lan.adytonsystems.com/node-4-phantomjs
 
 variables:
   JSPM_GITHUB_AUTH_TOKEN: Z3BtaWtlcDpkNDYyZjc5OWU0ODAwYmI3MjAyZWRjM2ZhZWI2Yzg2MDZiNzg5MmM0
@@ -19,6 +19,4 @@ build:
     paths:
       - dist/index.html
   script:
-    - echo 'ok'
-    - npm config set registry https://npm.lan.adytonsystems.com/
     - npm install && npm run deps && npm run build && npm run package
