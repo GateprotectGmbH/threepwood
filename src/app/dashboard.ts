@@ -43,7 +43,9 @@ class Dashboard {
 
   loading:string = 'Loading matching projects..';
   skipLoadBranches:boolean;
+  cancelLoadBranches:any;
 
+  // passed from parent
   config:SettingsConfig;
 
   constructor(private buildsService:BuildsService,
@@ -55,7 +57,6 @@ class Dashboard {
 
     // auto reload
     $interval(this.loadProjects.bind(this), Dashboard.PROJECTS_RELOAD_INTERVAL);
-    $interval(this.loadBranches.bind(this), Dashboard.BUILDS_RELOAD_INTERVAL);
     $interval(this.nextTab.bind(this), Dashboard.NEXT_PAGE_INTERVAL);
 
     // settings have changed, reload..
@@ -119,8 +120,21 @@ class Dashboard {
         this.loading = undefined;
       })
       .finally(() => {
+        this.loadBranchInterval();
         this.skipLoadBranches = false;
       })
+  }
+
+  // adjust interval time to allow paging through all tabs
+  loadBranchInterval() {
+    let approxLoadTime = 5 * 10000;
+    let timeForAllTabs = this.tabs.length * Dashboard.NEXT_PAGE_INTERVAL - approxLoadTime;
+    let time = Math.max(Dashboard.BUILDS_RELOAD_INTERVAL, timeForAllTabs);
+    if (this.cancelLoadBranches) {
+      this.$interval.cancel(this.cancelLoadBranches);
+    }
+    console.log(`next branch update in ${time/1000} seconds`);
+    this.cancelLoadBranches = this.$interval(this.loadBranches.bind(this), time);
   }
 }
 
