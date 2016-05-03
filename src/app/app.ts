@@ -36,18 +36,21 @@ export var AppModule = angular
   ])
   .value('$routerRootComponent', 'app')
   .config(function ($mdThemingProvider) {
-    $mdThemingProvider.theme('success').backgroundPalette('green').dark()
+    $mdThemingProvider.theme('default').primaryPalette('light-green').backgroundPalette('grey').dark();
   })
   .config(function ($mdThemingProvider) {
-    $mdThemingProvider.theme('running').backgroundPalette('blue').dark()
+    $mdThemingProvider.theme('success').backgroundPalette('green').dark();
   })
   .config(function ($mdThemingProvider) {
-    $mdThemingProvider.theme('failed').backgroundPalette('red').dark()
+    $mdThemingProvider.theme('running').backgroundPalette('blue').dark();
   })
   .config(function ($mdThemingProvider) {
-    $mdThemingProvider.theme('cancelled').backgroundPalette('grey').dark()
+    $mdThemingProvider.theme('failed').backgroundPalette('red').dark();
   })
   .config(function ($mdThemingProvider) {
-    $mdThemingProvider.theme('unknown').backgroundPalette('yellow').dark()
+    $mdThemingProvider.theme('cancelled').backgroundPalette('grey').dark();
+  })
+  .config(function ($mdThemingProvider) {
+    $mdThemingProvider.theme('unknown').backgroundPalette('yellow').dark();
   })
   .component('app', AppComponent);

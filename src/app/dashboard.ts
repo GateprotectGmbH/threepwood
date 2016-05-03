@@ -8,6 +8,28 @@ import IScope = angular.IScope;
 import IIntervalService = angular.IIntervalService;
 import {SettingsConfig} from "./settings";
 
+// if you change these constants you need to change the css
+const BRANCHES_PER_ROW = 3;
+const ROWS_PER_TAB = 3;
+
+class Row {
+  branches:Branch[];
+
+  constructor(branches:Branch[]) {
+    this.branches = branches.splice(0, BRANCHES_PER_ROW);
+  }
+}
+
+class Tab {
+  rows:Row[] = [];
+
+  constructor(public label:string, branches:Branch[]) {
+    for (let i = 0; i < ROWS_PER_TAB; i++) {
+      this.rows.push(new Row(branches));
+    }
+  }
+}
+
 class Dashboard {
   static PROJECTS_RELOAD_INTERVAL = 60 * 60 * 1000; // ms
   static PROJECTS_ERROR_RETRY = 60 * 1000; // ms
@@ -16,12 +38,11 @@ class Dashboard {
   static $inject = ['buildsService', '$q', '$scope', '$interval'];
 
   projects:Project[] = [];
-  branches:Branch[] = [];
-  branchOffset:number = 0;
-  rows = [0, 1, 2];
+  tabs:Tab[] = [];
+  selectedTab:number = 0;
 
   loading:string = 'Loading matching projects..';
-  skipLoadBranchSummary:boolean;
+  skipLoadBranches:boolean;
 
   config:SettingsConfig;
 
@@ -34,8 +55,8 @@ class Dashboard {
 
     // auto reload
     $interval(this.loadProjects.bind(this), Dashboard.PROJECTS_RELOAD_INTERVAL);
-    $interval(this.loadBranchSummaries.bind(this), Dashboard.BUILDS_RELOAD_INTERVAL);
-    $interval(this.nextPage.bind(this), Dashboard.NEXT_PAGE_INTERVAL);
+    $interval(this.loadBranches.bind(this), Dashboard.BUILDS_RELOAD_INTERVAL);
+    $interval(this.nextTab.bind(this), Dashboard.NEXT_PAGE_INTERVAL);
 
     // settings have changed, reload..
     $scope.$on('reload:projects', () => {
@@ -44,37 +65,36 @@ class Dashboard {
     });
   }
 
-  nextPage() {
-    this.branchOffset += 9;
+  nextTab() {
+    let nextTab = this.selectedTab + 1;
+    if (!this.tabs[nextTab]) {
+      nextTab = 0;
+    }
+    this.selectedTab = nextTab;
   }
 
-  row(rowIndex:number):Branch[] {
-    if (this.branchOffset >= this.branches.length) {
-      this.branchOffset = 0;
+  buildTabs(branches:Branch[]):Tab[] {
+    let tabs:Tab[] = [];
+    let label = 1;
+    while (branches.length) {
+      var tab = new Tab(label++, branches);
+      tabs.push(tab);
     }
-    let branches = [];
-    let startIndex = this.branchOffset + (rowIndex * 3);
-    let lastIndex = startIndex + 3;
-    for (let i = startIndex; i < lastIndex; i++) {
-      if (this.branches[i]) {
-        branches.push(this.branches[i]);
-      }
-    }
-    return branches;
+    return tabs;
   }
 
   loadProjects() {
     console.log('loading projects..');
-    this.skipLoadBranchSummary = true;
+    this.skipLoadBranches = true;
     this.buildsService.loadProjects(this.config.projectMatch)
       .then((projects) => {
-        this.skipLoadBranchSummary = false;
+        this.skipLoadBranches = false;
         this.projects = projects;
         // if already showing a message, then continue, otherwise stay silent
         if (this.loading) {
           this.loading = 'Loading matching builds..';
         }
-        this.loadBranchSummaries();
+        this.loadBranches();
       })
       .catch(() => {
         console.log('project load failed.. retrying..');
@@ -86,20 +106,20 @@ class Dashboard {
       });
   }
 
-  loadBranchSummaries() {
-    if (this.skipLoadBranchSummary) {
+  loadBranches() {
+    if (this.skipLoadBranches) {
       return;
     }
-    console.log('loading branch summaries..');
+    console.log('loading branches..');
     // to avoid multiple in-flight branch queries
-    this.skipLoadBranchSummary = true;
+    this.skipLoadBranches = true;
     this.buildsService.loadBranches(this.projects, this.config.branchMatch)
-      .then((branchSummaries) => {
-        this.branches = branchSummaries;
+      .then((branches) => {
+        this.tabs = this.buildTabs(branches);
         this.loading = undefined;
       })
       .finally(() => {
-        this.skipLoadBranchSummary = false;
+        this.skipLoadBranches = false;
       })
   }
 }
