@@ -23,7 +23,7 @@ class Row {
 class Tab {
   rows:Row[] = [];
 
-  constructor(public label:string, branches:Branch[]) {
+  constructor(public label:number, branches:Branch[]) {
     for (let i = 0; i < ROWS_PER_TAB; i++) {
       this.rows.push(new Row(branches));
     }
