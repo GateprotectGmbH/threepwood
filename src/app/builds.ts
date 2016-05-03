@@ -124,6 +124,11 @@ export class Commit implements Status {
               public branchName:string) {
   }
 
+  // return url to user view of builds for this commit
+  buildsUrl(host:string):string {
+    return `${host}/${this.projectName}/commit/${this.id}/builds`;
+  }
+
   theme():string {
     if (this.success()) {
       return 'success';

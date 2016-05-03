@@ -1,15 +1,28 @@
-<md-card md-theme="{{$ctrl.branch.theme()}}">
-  <div class="branch-card" >
-    <div class="branch-short-name" ng-bind="$ctrl.branch.shortName"></div>
-    <div class="branch-description">
+<md-card
+  md-theme="{{$ctrl.branch.theme()}}">
+  <div
+    class="branch-card">
+    <div
+      class="branch-short-name"
+      ng-bind="$ctrl.branch.shortName">
+    </div>
+    <div
+      class="branch-description">
       {{$ctrl.branch.description}}&nbsp;
     </div>
-    <div class="projects" style="font-size: {{$ctrl.projectNameFontSize()}};">
-      <span
-        ng-repeat="commit in $ctrl.branch.commits()"
-        class="project-name {{commit.theme()}}">
-        {{commit.projectName}}
-      </span>
+    <div
+      class="projects"
+      style="font-size: {{$ctrl.projectNameFontSize()}};">
+      <a
+        class="project-link"
+        target="_blank"
+        ng-href="{{commit.buildsUrl($ctrl.gitlabHost)}}"
+        ng-repeat="commit in $ctrl.branch.commits()">
+        <span
+          class="project-name {{commit.theme()}}"
+          ng-bind="commit.projectName">
+        </span>
+      </a>
     </div>
   </div>
 </md-card>

@@ -85,6 +85,12 @@
   margin: 7px;
 }
 
+.project-link {
+  &:link, &:visited, &:hover, &:active {
+    color: white;
+  }
+}
+
 .success {
   background-color: #008f00;
 }

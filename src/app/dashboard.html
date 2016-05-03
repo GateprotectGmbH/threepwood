@@ -3,6 +3,6 @@
 </div>
 <div class="dashboard" layout="column">
   <div layout="row" class="dashboard-row" ng-repeat="row in $ctrl.rows">
-    <branch-card branch="branch" ng-repeat="branch in $ctrl.row(row)"></branch-card>
+    <branch-card branch="branch" gitlab-host="$ctrl.config.url" ng-repeat="branch in $ctrl.row(row)"></branch-card>
   </div>
 </div>

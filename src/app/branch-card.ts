@@ -23,7 +23,8 @@ const BranchCardComponent:ng.IComponentOptions = {
   templateUrl: 'src/app/branch-card.html',
   controller: BranchCtrl,
   bindings: {
-    branch: '<'
+    branch: '<',    // Branch object to display
+    gitlabHost: '<' // host url of gitlab instance 
   }
 };
 
