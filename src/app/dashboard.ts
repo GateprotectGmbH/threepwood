@@ -127,7 +127,7 @@ class Dashboard {
 
   // adjust interval time to allow paging through all tabs
   loadBranchInterval() {
-    let approxLoadTime = 5 * 10000;
+    let approxLoadTime = 5 * 1000; // 5 seconds
     let timeForAllTabs = this.tabs.length * Dashboard.NEXT_PAGE_INTERVAL - approxLoadTime;
     let time = Math.max(Dashboard.BUILDS_RELOAD_INTERVAL, timeForAllTabs);
     if (this.cancelLoadBranches) {
