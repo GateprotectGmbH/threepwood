@@ -23,12 +23,12 @@ export class Branch implements Status {
   }
 
   extractFromName(name:string) {
-    let taskRegex = /^(.*-(\d+))(_|-)(.*)$/;
+    let taskRegex = /^(.*(-|_)(\d{3,}))(_|-)(.*)$/;
     let matches = name.match(taskRegex);
     if (matches) {
       this.shortName = matches[1];
-      this.issueId = matches[2];
-      this.description = matches[4];
+      this.issueId = matches[3];
+      this.description = matches[5];
     } else {
       this.shortName = name;
     }
