@@ -199,11 +199,17 @@ export class BuildsService {
 
   loadCommitBuilds(project:Project, branchMatch:string):IPromise<CommitBuild[]> {
     return this.gitlabApi.builds(project.id)
+      .then(filterByHavingCommit)
       .then(convertToCommitBuilds)
       .then(filterByBranchNameMatch)
       .then(orderByStartedAtDescending)
       .then(filterByMostRecentBranchJob)
       .then(logResult('commitBuilds'));
+
+    // commit might have been deleted, ignore build
+    function filterByHavingCommit(builds:Build[]):Build[] {
+      return builds.filter(build => build.commit != undefined);
+    }
 
     function convertToCommitBuilds(builds:Build[]):CommitBuild[] {
       return builds.map(build => new CommitBuild(build));
